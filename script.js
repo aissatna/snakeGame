@@ -10,6 +10,7 @@ window.onload = function () {
     var widthInBlocks = canvasWidth / blockSize;
     var heightInBlocks = canvasHeight / blockSize;
     var score;
+    var timeOut;
 
     // -------function to initialise canvas----------
     init();
@@ -18,13 +19,10 @@ window.onload = function () {
         var canvas = document.createElement('canvas');
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
-        canvas.style.border = "1px solid";
-        canvas.style.position = "absolute";
-        canvas.style.top = 0;
-        canvas.style.bottom = 0;
-        canvas.style.left = 0;
-        canvas.style.right = 0;
-        canvas.style.margin = "auto";
+        canvas.style.border = "15px solid gray";
+        canvas.style.display="block";
+        canvas.style.backgroundColor="#ddd7d5";
+        canvas.style.margin = " 20px auto";
         document.body.appendChild(canvas);
         ctx = canvas.getContext('2d');// drawing code in the canvas
         snakee = new Snake([[6, 4], [5, 4], [4, 4]], "right");
@@ -49,34 +47,52 @@ window.onload = function () {
 
             }
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            drawScore();
             snakee.draw();
             applee.draw();
-            drawScore();
-            setTimeout(refreshCanvas, delay);
+            timeOut=setTimeout(refreshCanvas, delay);
         }
     }
 
     // ----------function game over---------
     function gameOver() {
         ctx.save();
-        ctx.fillText("Game Over", 5, 15);
-        ctx.fillText("Appuyer sur la touche Espace pour rejouer", 5, 30);
+        ctx.font="bold 50px sans-serif";
+        ctx.fillStyle="#000";
+        ctx.textAlign= "center";
+        ctx.textBaseline="middle";
+        ctx.strokeStyle="#fff";
+        ctx.lineWidth=5;
+        var centreX = canvasWidth/2;
+        var centreY = canvasHeight/2;
+        ctx.strokeText("Game Over", centreX, centreY-180);
+        ctx.fillText("Game Over", centreX, centreY-180);
+        ctx.font="bold 30px sans-serif";
+        ctx.strokeText("Appuyer sur la touche Espace pour rejouer", centreX, centreY-120);
+        ctx.fillText("Appuyer sur la touche Espace pour rejouer", centreX, centreY-120);
         ctx.restore();
     }
 
     // ----------function restart game ---------
-    function restart() {
+    function restart(){
         snakee = new Snake([[6, 4], [5, 4], [4, 4]], "right");
         applee = new Apple([10, 10]);
         score = 0;
         refreshCanvas();
+        clearTimeout(timeOut);
 
     }
 
     // ----------function to draw score---------
     function drawScore() {
         ctx.save();
-        ctx.fillText(score.toString(), 5, canvasHeight - 5);
+        ctx.font="bold 100px sans-serif";
+        ctx.fillStyle="gray";
+        ctx.textAlign= "center";
+        ctx.textBaseline="middle";
+        var centreX = canvasWidth/2;
+        var centreY = canvasHeight/2;
+        ctx.fillText(score.toString(), centreX, centreY);
         ctx.restore();
     }
 
@@ -183,7 +199,6 @@ window.onload = function () {
 
         }
     }
-
     //------- Apple constructor-----------
     function Apple(position) {
         this.position = position;
